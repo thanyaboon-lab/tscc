@@ -4,14 +4,17 @@ import fsSync from 'fs';
 
 const databasePrefix = 'data';
 
-export interface DatabaseOptions {
-  defaultData: object;
+export interface DatabaseOptions<T> {
+  defaultData: T[];
 }
 
-export class Database<Entity extends {id: string}> {
+export class Database<Entity extends object & { id: string }> {
   private databasePath: string;
 
-  constructor(collectionName: string, protected option?: DatabaseOptions) {
+  constructor(
+    collectionName: string,
+    protected option?: DatabaseOptions<Entity>
+  ) {
     this.databasePath = path.join(databasePrefix, collectionName + '.json');
   }
 
@@ -23,9 +26,9 @@ export class Database<Entity extends {id: string}> {
         this.databasePath,
         JSON.stringify(defaultData, null, 2),
         'utf8'
-      )
+      );
     }
-    return this
+    return this;
   }
 
   async readAll() {
@@ -44,7 +47,7 @@ export class Database<Entity extends {id: string}> {
     const index = data.findIndex((item) => item.id === input.id);
     data[index] = {
       ...data[index],
-      ...input
+      ...input,
     } as Entity;
     await fs.writeFile(this.databasePath, JSON.stringify(data, null, 2));
   }
@@ -61,7 +64,7 @@ export class Database<Entity extends {id: string}> {
     // Add a new change
     data.push({
       ...input,
-      id: crypto.randomUUID()
+      id: crypto.randomUUID(),
     } as Entity);
     await fs.writeFile(this.databasePath, JSON.stringify(data, null, 2));
   }
