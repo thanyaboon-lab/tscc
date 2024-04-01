@@ -4,7 +4,9 @@
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
+    "strict": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
@@ -14,7 +16,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@tscc/core": ["core/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
